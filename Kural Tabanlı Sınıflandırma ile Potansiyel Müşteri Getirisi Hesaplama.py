@@ -53,7 +53,7 @@
 # ADIM 1: persona.csv dosyasını okutunuz ve veri seti ile ilgili genel bilgileri gösteriniz.
 import pandas as pd
 pd.set_option("display.max_rows", None)
-df = pd.read_csv('C:/Users/Enes Fevzi/PycharmProjects/pythonProject4/csv/persona.csv')
+df = pd.read_csv('PycharmProjects/pythonProject4/csv/persona.csv')
 df.head()
 df.shape
 df.info()
