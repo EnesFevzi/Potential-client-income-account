@@ -50,7 +50,7 @@
 #############################################
 
 
-# ADIM 1: persona.csv dosyasını okutunuz ve veri seti ile ilgili genel bilgileri gösteriniz.
+
 import pandas as pd
 pd.set_option("display.max_rows", None)
 df = pd.read_csv('PycharmProjects/pythonProject4/csv/persona.csv')
@@ -58,59 +58,55 @@ df.head()
 df.shape
 df.info()
 
-#  Kaç unique SOURCE vardır? Frekansları nedir?
+
 df["SOURCE"].nunique()
 df["SOURCE"].value_counts()
 
-#  Kaç unique PRICE vardır?
+
 df["PRICE"].nunique()
 
-#  Hangi PRICE'dan kaçar tane satış gerçekleşmiş?
+
 df["PRICE"].value_counts()
 
-#  Hangi ülkeden kaçar tane satış olmuş?
+
 df["COUNTRY"].value_counts()
 df.groupby("COUNTRY")["PRICE"].count()
 
 df.pivot_table(values="PRICE",index="COUNTRY",aggfunc="count")
 
 
-#  Ülkelere göre satışlardan toplam ne kadar kazanç
+
 df.groupby("COUNTRY")["PRICE"].sum()
 df.groupby("COUNTRY").agg({"PRICE": "sum"})
 
 df.pivot_table(values="PRICE",index="COUNTRY",aggfunc="sum")
 
-#  SOURCE türlerine göre göre satış sayıları
+
 df["SOURCE"].value_counts()
 
-#  Ülkelere göre PRICE ortalamaları
+
 df.groupby(by=['COUNTRY']).agg({"PRICE": "mean"})
 
-#  SOURCE'lara göre PRICE ortalamaları
+
 df.groupby(by=['SOURCE']).agg({"PRICE": "mean"})
 
-#  COUNTRY-SOURCE kırılımında PRICE ortalamaları
+
 df.groupby(by=["COUNTRY", 'SOURCE']).agg({"PRICE": "mean"})
 
 
 
 #############################################
-# ADIM 2: COUNTRY, SOURCE, SEX, AGE kırılımında ortalama kazançları
+# COUNTRY, SOURCE, SEX, AGE kırılımında ortalama kazançları
 #############################################
 df.groupby(["COUNTRY", 'SOURCE', "SEX", "AGE"]).agg({"PRICE": "mean"}).head()
 
 
-#############################################
-# ADIM 3: Çıktıyı PRICE'a göre sıralama
-#############################################
+
 agg_df = df.groupby(by=["COUNTRY", 'SOURCE', "SEX", "AGE"]).agg({"PRICE": "mean"}).sort_values("PRICE", ascending=False)
 agg_df.head()
 
 
-#############################################
-# ADIM 4: Indekste yer alan isimleri değişken ismine çevirelim
-#############################################
+
 # Üçüncü sorunun çıktısında yer alan PRICE dışındaki tüm değişkenler index isimleridir.
 # Bu isimleri değişken isimlerine çevirelim
 # İpucu: reset_index()
@@ -120,9 +116,7 @@ agg_df = agg_df.reset_index()
 agg_df.head()
 
 
-#############################################
-# ADIM 5: AGE değişkenini kategorik değişkene çeviriniz ve agg_df'e ekleyelim
-#############################################
+
 # Age sayısal değişkenini kategorik değişkene çevirelim
 # Aralıkları ikna edici olacağını düşündüğünüz şekilde oluşturalım.
 # Örneğin: '0_18', '19_23', '24_30', '31_40', '41_70'
@@ -138,9 +132,7 @@ agg_df["age_cat"] = pd.cut(agg_df["AGE"], bins, labels=mylabels)
 agg_df.head()
 
 
-#############################################
-# ADIM 6: Yeni level based müşterileri tanımlayınız ve veri setine değişken olarak ekleyelim
-#############################################
+
 # customers_level_based adında bir değişken tanımlayınız ve veri setine bu değişkeni ekleyelim.
 # Dikkat!
 # list comp ile customers_level_based değerleri oluşturulduktan sonra bu değerlerin tekilleştirilmesi gerekmektedir.
@@ -189,9 +181,7 @@ agg_df["customers_level_based"].value_counts()
 agg_df.head()
 
 
-#############################################
-# ADIM 7: Yeni müşterileri (USA_ANDROID_MALE_0_18) segmentlere ayıralım.
-#############################################
+
 # PRICE'a göre segmentlere ayırınız,
 # segmentleri "SEGMENT" isimlendirmesi ile agg_df'e ekleyiniz,
 # segmentleri betimleyiniz,
@@ -201,9 +191,6 @@ agg_df.groupby("SEGMENT").agg({"PRICE": "mean"})
 
 
 
-#############################################
-# ADIM 8: Yeni gelen müşterileri sınıflandırınız ne kadar gelir getirebileceğini tahmin edelim
-#############################################
 # 33 yaşında ANDROID kullanan bir Türk kadını hangi segmente aittir ve ortalama ne kadar gelir kazandırması beklenir?
 new_user = "TUR_ANDROID_FEMALE_31_40"
 agg_df[agg_df["customers_level_based"] == new_user]
